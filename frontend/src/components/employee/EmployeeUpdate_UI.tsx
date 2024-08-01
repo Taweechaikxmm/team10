@@ -33,7 +33,9 @@ function EmployeeUpdate_UI() {
   const [noAccess, setNoAccess] = React.useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
-
+//const เซ็ตค่าได้ครังเดียว
+//วาร์ ทะลุได้หมด
+//เรส แก้ได้แค่ในไฟล์นั้น
   const getEmployee = async () => {
     //ดึงข้อมูลพนักงาน
     const apiUrl = `http://localhost:8080/employees/${employee_id}`;
@@ -92,7 +94,7 @@ function EmployeeUpdate_UI() {
         }
       });
   };
-
+//คอนเทนไทป์ เป็น เจสัน มานี่
   const getPosition = async () => {
     //ดึงข้อมูล Position
     const apiUrl = "http://localhost:8080/positions";
@@ -214,7 +216,7 @@ function EmployeeUpdate_UI() {
         <Paper>
           <Box paddingX={2}>
             <div style={{ paddingTop: 20, fontWeight: "bold" }}>
-              Employee Create
+              Employee Edit
             </div>
             <Grid container>
               <Grid paddingX={2} paddingY={2}>
@@ -318,6 +320,9 @@ function EmployeeUpdate_UI() {
                 <Grid container justifyContent={"center"} paddingY={4}>
                   <Button
                     variant="contained"
+                    onClick={() => {
+                      localStorage.removeItem("eid_edit");
+                    }}
                     color="error"
                     href="/employee"
                     sx={{ marginX: 2 }}

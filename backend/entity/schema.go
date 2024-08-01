@@ -33,7 +33,7 @@ type Customer struct {
 	Customer_Name      string `valid:"required~Name not blank"`
 	Customer_Username  string `valid:"matches(^[_A-z0-9]*((-)*[_A-z0-9])*$)~Username not special characters ,required~Username not blank"`
 	Customer_Phone     string `valid:"matches(^[0][0-9]{9}$)~Phonenumber is not valid,required~Phone not blank"`
-	Customer_Promptpay string `valid:"matches((^[0][0-9]{9}$)|([0-9]{13}))~Promptpay is not valid,required~Promptpay not blank"`
+	Customer_Promptpay string `valid:"matches((^[0][0-9]{9}$)|(^([1-9]{1})([0-9]{12})$))~Promptpay is not valid,required~Promptpay not blank"`
 	Customer_Password  string `valid:"minstringlength(8)~Password must be more than or equal to 8 characters,required~Password not blank"`
 	Customer_Address   string `valid:"required~Address not blank"`
 	Customer_Datetime  time.Time
@@ -115,7 +115,7 @@ type Size struct {
 
 type Stock struct {
 	gorm.Model
-	List_Number string `gorm:"uniqueIndex" valid:"matches(^([1-9]{1})([0-9]{9}))~ListNumber is not valid ,required~กรุณากรอกรหัสรายการ"`
+	List_Number string `gorm:"uniqueIndex" valid:"matches(^([0-9]{10}))~ListNumber is not valid ,required~กรุณากรอกรหัสรายการ"`
 	TypeID      *uint
 	Type        Type `gorm:"references:id" valid:"-" `
 	BrandID     *uint
@@ -171,11 +171,11 @@ type Service struct {
 	Customer_ID *uint    `valid:"-"`
 	Customer    Customer `gorm:"references:id" valid:"-"`
 
-	Bill_status uint
-	Address     string `valid:"minstringlength(8)~โปรดระบุให้ละเอียด,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดกรอกที่อยู่"`
-	Bill_Price  int
-	Service_Time time.Time 
-	Bill        []Bill `gorm:"foreignKey:Service_ID"`
+	Bill_status  uint
+	Address      string `valid:"minstringlength(8)~โปรดระบุให้ละเอียด,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดกรอกที่อยู่"`
+	Bill_Price   int
+	Service_Time time.Time
+	Bill         []Bill `gorm:"foreignKey:Service_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -208,7 +208,6 @@ type Form struct {
 	Customer    Customer `gorm:"references:id" valid:"-"`
 
 	Form_Time time.Time
-
 }
 
 /* -------------------------------------------------------------------------- */
@@ -229,7 +228,7 @@ type Bill struct {
 	QuotaCode      *QuotaCode  `gorm:"references:id" valid:"-"`
 	Paymenttype_ID *uint       `valid:"-"`
 	Paymenttype    Paymenttype `gorm:"references:id" valid:"-"`
-	Bill_Price     uint        `valid:"-"`
+	Bill_Price     uint         `valid:"-"`
 	Time_Stamp     time.Time   `valid:"required~กรุณาใส่เวลาให้ถูกต้อง, DateTimeNotFuture~เวลาห้ามเป็นอนาคต, DateTimeNotPast~เวลาห้ามเป็นอดีต"`
 	QuotaCode_FK   []QuotaCode `gorm:"foreignKey:Bill_ID"`
 	Receive        []Receive   `gorm:"foreignKey:Bill_ID"`
@@ -319,7 +318,7 @@ type Vehicle struct {
 	Engine_ID        *uint         `valid:"-"`
 	Engine           Engine        `gorm:"references:id" valid:"-"`
 	ListModel        string        `valid:"required~จำเป็นต้องกรอกรุ่นของรถ"`
-	Registration     string        `valid:"required~จำเป็นต้องกรอกทะเบียนรถ , maxstringlength(8)~กรอกทะเบียนรถได้สูงสุด 7 ตัว , alphabet1~ต้องมีตัวเลขอย่างน้อย 1 ตัว , alphabet2~ต้องมีตัวอักษรภาษาไทยอย่างน้อย 1 ตัว"`
+	Registration     string        `valid:"required~จำเป็นต้องกรอกทะเบียนรถ , maxstringlength(8)~กรอกทะเบียนรถได้สูงสุด 8 ตัว , alphabet1~ต้องมีตัวเลขอย่างน้อย 1 ตัว , alphabet2~ต้องมีตัวอักษรภาษาไทยอย่างน้อย 1 ตัว"`
 	Date_Insulance   time.Time     `valid:"DateNotPast~เวลาห้ามเป็นอดีต"`
 	Delivery         []Delivery    `gorm:"foreignKey:Vehicle_ID"`
 }
@@ -344,7 +343,7 @@ type Complete struct {
 	Receive_ID *uint   `valid:"-"`
 	Receive    Receive `gorm:"references:id" valid:"-"`
 
-	Packaging_ID *int     `valid:"-"`
+	Packaging_ID *int      `valid:"-"`
 	Packaging    Packaging `gorm:"references:id" valid:"-"`
 
 	Confirmation []Confirmation `gorm:"foreignKey:Complete_ID"`

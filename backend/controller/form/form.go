@@ -39,12 +39,12 @@ func CreateForm(c *gin.Context) {
 	println(form.ID)
 
 		if tx := entity.DB().Where("id = ?", form.Customer_ID).First(&customer); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "type not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Customer not found"})
 		return
 	}
 
 	if tx := entity.DB().Where("id = ?", form.SatisfactionID).First(&satisfaction); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Department not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Satisfaction not found"})
 		return
 	}
 
@@ -63,10 +63,10 @@ func CreateForm(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if _, err := Validatecheckformtype(fm); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	// if _, err := Validatecheckformtype(fm); err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
 
 	if err := entity.DB().Create(&fm).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -115,7 +115,7 @@ func DeleteForm(c *gin.Context) {
 
 	if tx := entity.DB().Exec("DELETE FROM forms WHERE id = ?", id); tx.RowsAffected == 0 {
 
-		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "form not found"})
 
 		return
 
@@ -168,6 +168,8 @@ func UpdateForm(c *gin.Context) {
 		FormType:     formtype,
 		Comment: updateComment,
 		Customer: customer,
+		Form_Time: time.Now(),
+
 	}
 	if _, err := govalidator.ValidateStruct(up_fmc); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -202,11 +204,11 @@ func ListFormByUID(c *gin.Context) {
 
 }
 
-func Validatecheckformtype(formtype entity.Form) (bool, error) {
-	var form []entity.Form
-	database := entity.DB()
-	if tx := database.Where("id = ? AND id = ?", formtype.FormType.ID, formtype.Customer.ID).Find(&form); tx.RowsAffected >= 1 {
-		return false, formtypeError{"หัวข้อการประเมินซ้ำกัน"}
-	}
-	return true, nil
-}
+// func Validatecheckformtype(formtype entity.Form) (bool, error) {
+// 	var form []entity.Form
+// 	database := entity.DB()
+// 	if tx := database.Where("id = ? AND id = ?", formtype.FormType.ID, formtype.Customer.ID).Find(&form); tx.RowsAffected >= 1 {
+// 		return false, formtypeError{"หัวข้อการประเมินซ้ำกัน"}
+// 	}
+// 	return true, nil
+// }

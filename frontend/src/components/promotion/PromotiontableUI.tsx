@@ -117,8 +117,7 @@ function PromotionTable_UI() {
 
   return (
     <React.Fragment>
-      <CssBaseline />
-      <Container maxWidth="lg" sx={{ p: 2 }}>
+      <Container maxWidth="lg">
       <Paper style={{ background: "rgba(0, 0, 0, 0.2)" }}>
           <h1 style={{ textAlign: "center", paddingTop: 20, color: "white" }}>
           Promotion<StorefrontIcon/>
